@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static bool IsBalanced(string expression)
+    {
+        // Membuat Stack bertipe char untuk menyimpan tanda kurung buka
+        Stack<char> stack = new Stack<char>();
+
+        foreach (char c in expression)
+        {
+            // Jika karakter adalah tanda kurung buka, masukkan ke stack (Push)
+            if (c == '(' || c == '{' || c == '[')
+            {
+                stack.Push(c);
+            }
+            // Jika karakter adalah tanda kurung tutup
+            else if (c == ')' || c == '}' || c == ']')
+            {
+                // Jika stack kosong saat ketemu kurung tutup, berarti tidak seimbang
+                if (stack.Count == 0)
+                    return false;
+
+                // Ambil dan hapus elemen teratas stack (Pop)
+                char top = stack.Pop();
+
+                // Periksa apakah pasangan kurung buka dan tutupnya sesuai
+                if (!IsMatchingPair(top, c))
+                    return false;
+            }
+        }
+
+        // Jika stack benar-benar kosong di akhir, artinya semua kurung seimbang
+        return stack.Count == 0;
+    }
+
+    static bool IsMatchingPair(char open, char close)
+    {
+        return (open == '(' && close == ')') ||
+               (open == '[' && close == ']') ||
+               (open == '{' && close == '}');
+    }
+
+    static void Main()
+    {
+        // Pengujian beberapa contoh ekspresi
+        string expr1 = "({[]})";
+        string expr2 = "([)]";
+        string expr3 = "(((";
+        string expr4 = "{[a + (b * c)]}";
+
+        Console.WriteLine($"{expr1} -> {IsBalanced(expr1)}"); // True
+        Console.WriteLine($"{expr2} -> {IsBalanced(expr2)}"); // False
+        Console.WriteLine($"{expr3} -> {IsBalanced(expr3)}"); // False
+        Console.WriteLine($"{expr4} -> {IsBalanced(expr4)}"); // True
+    }
+}
